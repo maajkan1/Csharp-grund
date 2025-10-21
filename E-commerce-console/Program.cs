@@ -14,8 +14,9 @@ class Program
 {
     static void Main(string[] args)
     {
-        //Skapar en lista av ShoppingCart
+        //Skapar en lista av ordrar
         var orders = new List<Order>();
+        //Skapar en lista av ShoppingCart
         var cart = new ShoppingCart();
         //Skapar en lista av Products klassen
         List<Products> products =

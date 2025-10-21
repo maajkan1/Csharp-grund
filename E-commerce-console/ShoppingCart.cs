@@ -48,7 +48,7 @@ public class ShoppingCart
        Console.WriteLine("Här har du din varukorg!");
        foreach (var product in Cart)
        {
-           Console.WriteLine($"Produkt: {product.ProductName} -  Pris: {product.ProductPrice}kr");
+           Console.WriteLine($"Produkt: {product.ProductName} -  Pris: {product.ProductPrice:C}");
        }
        Console.WriteLine($"Totalpriset för alla produkter är: {TotalSum()}");
        Console.WriteLine("Vill du slutföra ditt köp? Y/N");
