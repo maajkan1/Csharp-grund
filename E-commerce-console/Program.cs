@@ -69,12 +69,17 @@ class Program
                         }
                     }
                     break;
-                case 2: ShoppingCart();
-                 
+                case 2:
+                    if (cart.Cart.Count == 0)
+                    {
+                        cart.EmptyCart();
+                        break;
+                    }
+                    cart.DisplayCart();
                     break;
-                case 3: Order();
+                /*case 3: Order();
                     break;
-                case 4: addProducts();*/
+                case 4: addProducts();#1#*/
                 default:
                     Console.WriteLine("Ogiltlig inmatning");
                     break;

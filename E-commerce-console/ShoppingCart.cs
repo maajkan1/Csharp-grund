@@ -8,8 +8,9 @@ public class ShoppingCart
 {
    public List<Products> Cart = new List<Products>();
 
-   public  decimal TotalSum(decimal sum)
+   public  decimal TotalSum()
    {
+       decimal sum = 0;
        foreach (var product in Cart)
        {
            sum += product.ProductPrice;
@@ -34,6 +35,17 @@ public class ShoppingCart
    public void RemoveProduct(Products product)
    {
        Cart.Remove(product);
+   }
+
+   public void DisplayCart()
+   {
+       Console.WriteLine("Här har du din varukorg!");
+       foreach (var product in Cart)
+       {
+           Console.WriteLine($"Produkt: {product.ProductName} -  Pris: {product.ProductPrice}kr");
+       }
+
+       Console.WriteLine($"Totalpriset för alla produkter är: {TotalSum()}");
    }
     
 }
