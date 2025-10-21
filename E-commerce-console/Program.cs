@@ -14,6 +14,8 @@ class Program
 {
     static void Main(string[] args)
     {
+        //Skapar en lista av ShoppingCart
+        var orders = new List<Order>();
         var cart = new ShoppingCart();
         //Skapar en lista av Products klassen
         List<Products> products =
@@ -23,7 +25,7 @@ class Program
                 new Products("Kavaj", "Blå kavaj", 500m),
                 new Products("Tröja", "Rödgul tröja", 350m)
             ];
-
+        // Startar Loopen för programmet
         while (true)
         {
             Console.WriteLine("===Shop of Commerce===");
@@ -31,59 +33,29 @@ class Program
             Console.WriteLine("[2] Varukorg");
             Console.WriteLine("[3] Ordrar");
             Console.WriteLine("[4] Lägg till produkter");
-
-            int choice = ConsoleUtils.ReadInt();
+            
+            var choice = ConsoleUtils.ReadInt();
             Console.Clear();
             switch (choice)
             {
                 case 1:
-                    foreach (var product in products)
-                    {
-                        if (product.ProductInStock == true)
-                        {
-                            Console.WriteLine(
-                                $"[{product.ProductId}] Produkt: {product.ProductName}\nPris: {product.ProductPrice}kr\nBeskrivning: {product.ProductDescription}");
-                            Console.WriteLine("----------------------------------------");
-                        }
-                    }
-
-                    Console.WriteLine("För att köpa någon av produkterna, var snäll att skriv in deras siffra:");
-                    Console.WriteLine("O för att återgå till menyn");
-                    int productChoice = ConsoleUtils.ReadInt();
-                    if (productChoice == 0)
-                    {
-                        break;
-                    } else if (productChoice > products.Count)
-                    {
-                        Console.WriteLine("Den valda siffran fanns inte som en produkt");
-                        break;
-                    }
-                    
-                    for (int i = 0; i < products.Count; i++)
-                    {
-                        if (productChoice == products[i].ProductId)
-                        {
-                            cart.AddProduct(products[i]);
-                            products[i].ProductInStock = false;
-                            break;
-                        }
-                    }
+                    Products.ProductsDisplay(products, cart);
                     break;
                 case 2:
-                    if (cart.Cart.Count == 0)
+                    cart.DisplayCart(orders);
+                    break;
+                case 3: 
+                    foreach (var order in orders)
                     {
-                        cart.EmptyCart();
-                        break;
+                        order.DisplayOrders();
                     }
-                    cart.DisplayCart();
                     break;
-                /*case 3: Order();
-                    break;
-                case 4: addProducts();#1#*/
+                /*case 4: addProducts();#1#*/
                 default:
                     Console.WriteLine("Ogiltlig inmatning");
                     break;
             }
         }
     }
+    
 }

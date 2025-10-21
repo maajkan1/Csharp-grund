@@ -19,7 +19,7 @@ public class ShoppingCart
        return sum;
    }
 
-   public void EmptyCart()
+   private void EmptyCart()
    {
        if (Cart.Count == 0)
        {
@@ -37,15 +37,40 @@ public class ShoppingCart
        Cart.Remove(product);
    }
 
-   public void DisplayCart()
+   public void DisplayCart(List<Order> orders)
    {
+       if (Cart.Count == 0)
+       {
+           EmptyCart();
+           return;
+       }
+       
        Console.WriteLine("Här har du din varukorg!");
        foreach (var product in Cart)
        {
            Console.WriteLine($"Produkt: {product.ProductName} -  Pris: {product.ProductPrice}kr");
        }
-
        Console.WriteLine($"Totalpriset för alla produkter är: {TotalSum()}");
+       Console.WriteLine("Vill du slutföra ditt köp? Y/N");
+       var buy = ConsoleUtils.ReadString();
+       if (buy.ToLower() == "y")
+       {
+           // ✅ Create new order and add it to the list
+           var order = new Order
+           {
+               ProductsOrdered = new List<Products>(Cart),
+               OrderDate = DateTime.Now
+           };
+
+           orders.Add(order);
+           Cart.Clear();
+
+           Console.WriteLine("Köpet är gjort! Kolla (3) Ordrar för mer info.");
+       }
+       else
+       {
+           Console.WriteLine("Tillbaka till huvudmeny");
+       }
    }
     
 }
