@@ -13,7 +13,7 @@ public class Products
     public decimal ProductPrice { get; set; }
     public bool ProductInStock { get; set; }
     public int ProductId { get; set; }
-    private static int _nextId = 0;
+    private static int _nextId = 1;
     public Products(string name, string description, decimal price)
     {
         ProductId = _nextId++;
@@ -22,4 +22,5 @@ public class Products
         ProductPrice = price;
         ProductInStock = true;
     }
+    
 }
