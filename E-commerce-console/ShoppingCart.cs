@@ -55,7 +55,6 @@ public class ShoppingCart
        var buy = ConsoleUtils.ReadString();
        if (buy.ToLower() == "y")
        {
-           // ✅ Create new order and add it to the list
            var order = new Order
            {
                ProductsOrdered = new List<Products>(Cart),

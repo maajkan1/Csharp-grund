@@ -10,13 +10,10 @@ namespace E_commerce_console;
 
  
 public class Order
-{
-    public decimal TotalSum { get; set; }
+{ 
     public DateTime OrderDate { get; set; }
-    
     public List<Products> ProductsOrdered { get; set; } = new List<Products>();
     
-
     public void DisplayOrders()
     {
         Console.WriteLine("Ordrar:");
