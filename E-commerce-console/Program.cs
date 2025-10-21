@@ -12,6 +12,38 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        //Skapar en lista av Products klassen
+        List<Products> products = new List<Products>();
+        //Lägger in några manuella för att simulera en shop.
+        products.Add(new Products("Jeans", "Snygga blåa jeans", 250m));
+        products.Add(new Products("Kavaj", "Snygga kavaj", 500));
+        products.Add(new Products("Tröja", "Snygga tröja", 350));
+
+        foreach (var product in products)
+        {
+            Console.WriteLine(product.ProductId);
+        }
+
+        while (true)
+        {
+            Console.WriteLine("===Shop of Commerce===");
+            Console.WriteLine("[1] Produkter");
+            Console.WriteLine("[2] Varukorg");
+            Console.WriteLine("[3] Ordrar");
+            Console.WriteLine("[4] Lägg till produkter");
+
+            string val = Console.ReadLine();
+
+            // switch (val)
+            // {
+            //     case 1: Products();
+            //         break;
+            //     case 2: ShoppingCart();
+            //         break;
+            //     case 3: Order();
+            //         break;
+            //     case 4: addProducts();
+            // }
+        }
     }
 }
