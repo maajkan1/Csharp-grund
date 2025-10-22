@@ -6,12 +6,12 @@
  */
 public class ShoppingCart
 {
-   public List<Products> Cart = new List<Products>();
+    private readonly List<Products> _cart = [];
 
    public  decimal TotalSum()
    {
        decimal sum = 0;
-       foreach (var product in Cart)
+       foreach (var product in _cart)
        {
            sum += product.ProductPrice;
        }
@@ -21,7 +21,7 @@ public class ShoppingCart
 
    private void EmptyCart()
    {
-       if (Cart.Count == 0)
+       if (_cart.Count == 0)
        {
            Console.WriteLine("Du måste lägga till något i din varukorg för att fortsätta!");
        }
@@ -29,24 +29,24 @@ public class ShoppingCart
 
    public void AddProduct(Products product)
    {
-       Cart.Add(product);
+       _cart.Add(product);
    }
 
    public void RemoveProduct(Products product)
    {
-       Cart.Remove(product);
+       _cart.Remove(product);
    }
 
    public void DisplayCart(List<Order> orders)
    {
-       if (Cart.Count == 0)
+       if (_cart.Count == 0)
        {
            EmptyCart();
            return;
        }
        
        Console.WriteLine("Här har du din varukorg!");
-       foreach (var product in Cart)
+       foreach (var product in _cart)
        {
            
            Console.WriteLine($"Produkt: {product.ProductName} -  Pris: {product.ProductPrice:C}");
@@ -56,21 +56,21 @@ public class ShoppingCart
        var buy = ConsoleUtils.ReadString();
        if (buy.ToLower() == "n")
        {
-           foreach (var product in Cart)
+           foreach (var product in _cart)
            {
                product.ProductInStock = true;
            }
-           Cart.Clear();
+           _cart.Clear();
        }
        if (buy.ToLower() == "y")
        {
            var order = new Order
            {
-               ProductsOrdered = new List<Products>(Cart),
+               ProductsOrdered = new List<Products>(_cart),
                OrderDate = DateTime.Now
            };
            orders.Add(order);
-           Cart.Clear();
+           _cart.Clear();
 
            Console.WriteLine("Köpet är gjort! Kolla (3) Ordrar för mer info.");
        }
