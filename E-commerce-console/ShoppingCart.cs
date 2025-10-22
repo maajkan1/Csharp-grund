@@ -48,11 +48,20 @@ public class ShoppingCart
        Console.WriteLine("Här har du din varukorg!");
        foreach (var product in Cart)
        {
+           
            Console.WriteLine($"Produkt: {product.ProductName} -  Pris: {product.ProductPrice:C}");
        }
        Console.WriteLine($"Totalpriset för alla produkter är: {TotalSum()}");
        Console.WriteLine("Vill du slutföra ditt köp? Y/N");
        var buy = ConsoleUtils.ReadString();
+       if (buy.ToLower() == "n")
+       {
+           foreach (var product in Cart)
+           {
+               product.ProductInStock = true;
+           }
+           Cart.Clear();
+       }
        if (buy.ToLower() == "y")
        {
            var order = new Order
@@ -60,7 +69,6 @@ public class ShoppingCart
                ProductsOrdered = new List<Products>(Cart),
                OrderDate = DateTime.Now
            };
-
            orders.Add(order);
            Cart.Clear();
 

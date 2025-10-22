@@ -57,7 +57,8 @@ class Program
                     }
                     
                     break;
-                /*case 4: addProducts();#1#*/
+                case 4: Products.AddNewProduct(products);
+                    break;
                 default:
                     Console.WriteLine("Ogiltlig inmatning");
                     break;

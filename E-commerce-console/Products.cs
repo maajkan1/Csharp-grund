@@ -1,4 +1,7 @@
-﻿namespace E_commerce_console;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.Design.Serialization;
+
+namespace E_commerce_console;
 /*
  * Namn på produkt
  * Pris
@@ -26,6 +29,7 @@ public class Products
     }
     public static void ProductsDisplay(List<Products> products, ShoppingCart cart)
     {
+        products.Sort((id1, id2) => id1.ProductId.CompareTo(id2.ProductId));
         // För varje product så kollar den så ProductInStock = true
         // Är ProductInStock = false, så är den i ShoppingCart
         foreach (var product in products)
@@ -62,6 +66,22 @@ public class Products
                 break;
             }
         }
+    }
+
+    public static void AddNewProduct(List<Products> product)
+    {
+        Console.WriteLine("Namn på produkten:");
+        var name = ConsoleUtils.ReadString();
+
+        Console.WriteLine("Beskrivning av produkten:");
+        var description = ConsoleUtils.ReadString();
+
+        Console.WriteLine("Pris på produkten:");
+        var price = ConsoleUtils.ReadDecimal();
+        
+        var newProduct = new Products(name, description, price);
+        
+        product.Add(newProduct);
     }
     
 }
