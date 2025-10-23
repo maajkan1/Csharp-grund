@@ -16,7 +16,7 @@ public class Products
     public string ProductDescription { get; }
     public decimal ProductPrice { get; }
     public bool ProductInStock { get; set; }
-    public int ProductId { get; }
+    private int ProductId { get; }
     //För att kunna ge ett unikt ID på alla varor (där man targetar dom)
     private static int _nextId = 1;
     public Products(string name, string description, decimal price)

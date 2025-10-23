@@ -55,7 +55,6 @@ class Program
                     {
                         order.DisplayOrders();
                     }
-                    
                     break;
                 case 4: Products.AddNewProduct(products);
                     break;

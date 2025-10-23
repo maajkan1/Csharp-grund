@@ -8,7 +8,7 @@ public class ShoppingCart
 {
     private readonly List<Products> _cart = [];
 
-   public  decimal TotalSum()
+   private  decimal TotalSum()
    {
        decimal sum = 0;
        foreach (var product in _cart)
