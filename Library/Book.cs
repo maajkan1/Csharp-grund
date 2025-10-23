@@ -25,13 +25,14 @@ public class Book
     
     public Genres Genre { get; private set; }
 
-    public Book(string title, string author, string description, string isbn)
+    public Book(string title, string author, string description, string isbn, Genres genre)
     {
         Title = title;
         Author = author;
         Description = description;
         ISBN = isbn;
         IsLoaned = false;
+        Genre = genre;
     }
 }
 public enum Genres
@@ -40,5 +41,6 @@ public enum Genres
     SciFi,
     Fantasy,
     Drama,
-    Mystery
+    Mystery,
+    Cooking,
 }
