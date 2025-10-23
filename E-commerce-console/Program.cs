@@ -49,7 +49,7 @@ class Program
                     if (orders.Count == 0)
                     {
                         Console.WriteLine("Det är inga ordrar lagda.");
-                        Thread.Sleep(1000);
+                        Thread.Sleep(3000);
                     }
                     foreach (var order in orders)
                     {
