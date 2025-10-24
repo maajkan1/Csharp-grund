@@ -11,13 +11,14 @@ Användaren kan även se sina lånade böcker, och välja att lämna tillbaka de
 public class Library
 {
     public List<Book> LibraryBooks = new List<Book>();
-    public List<User> Users {get; set;}
+    public List<User> Users { get; set; } = new List<User>();
     
     public void DisplayLibrary()
     {
         foreach (var book in LibraryBooks)
         {
             Console.WriteLine(book.Title);
+            
         }
     }
     

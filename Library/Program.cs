@@ -18,10 +18,7 @@ class Program
         
         
         var libraryBooks = library.LibraryBooks;
-        Console.WriteLine(libraryBooks);
-        var book = new Book("Edisons recept", "Edison Kadirsson", "Massa fantastiska recept", "12345123412341",
-            Genres.Cooking);
-        libraryBooks.Add(book);
+        libraryBooks.AddRange(Book.GetRandomizedBooks());
         library.DisplayLibrary();
         users.UserBooks = libraryBooks;
 

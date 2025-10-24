@@ -12,19 +12,25 @@ public class User
     private int PinCode { get; set; }
     public List<Book> UserBooks { get; set; }
 
+    private int _id = 1;
+
     public User(string name, int pinCode, List<Book> userBooks)
     {
         Name = name;
         PinCode = pinCode;
         UserBooks = userBooks;
     }
-
+    
     public void DisplayLoanedBooks()
     {
         foreach(var book in UserBooks)
         {
-            Console.WriteLine($"Boktitel: {book.Title}\nFörfattare: {book.Author}\n" +
-                              $"Tid till återlämning: {book.IsLoaned}");
+            Console.WriteLine($"[{_id}]");
+            Console.WriteLine($"Boktitel: {book.Title}\nFörfattare: {book.Author}\n" + (Book.TimeLeftOnLoan(book)));
+            
+            Console.WriteLine("");
+            
+            _id++;
         }
     }
 }
