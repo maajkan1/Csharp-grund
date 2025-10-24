@@ -8,7 +8,7 @@ public class ShoppingCart
 {
     private readonly List<Products> _cart = [];
 
-   public  decimal TotalSum()
+   private  decimal TotalSum()
    {
        decimal sum = 0;
        foreach (var product in _cart)
@@ -18,6 +18,8 @@ public class ShoppingCart
 
        return sum;
    }
+
+   private decimal SalesTax() => TotalSum() * 0.25m;
 
    private void EmptyCart()
    {
@@ -46,7 +48,8 @@ public class ShoppingCart
            
            Console.WriteLine($"Produkt: {product.ProductName} -  Pris: {product.ProductPrice:C}");
        }
-       Console.WriteLine($"Totalpriset för alla produkter är: {TotalSum()}");
+       Console.WriteLine($"Totalpriset för alla produkter är: {TotalSum():C}");
+       Console.WriteLine($"Varav momsen är: {SalesTax():C}");
        Console.WriteLine("Vill du slutföra ditt köp? Y/N");
        var buy = ConsoleUtils.ReadString();
        if (buy.ToLower() == "n")

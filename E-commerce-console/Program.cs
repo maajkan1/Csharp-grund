@@ -49,13 +49,12 @@ class Program
                     if (orders.Count == 0)
                     {
                         Console.WriteLine("Det är inga ordrar lagda.");
-                        Thread.Sleep(1000);
+                        Thread.Sleep(3000);
                     }
                     foreach (var order in orders)
                     {
                         order.DisplayOrders();
                     }
-                    
                     break;
                 case 4: Products.AddNewProduct(products);
                     break;

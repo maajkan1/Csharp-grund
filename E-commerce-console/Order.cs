@@ -12,7 +12,6 @@ namespace E_commerce_console;
 public class Order
 { 
     public DateTime OrderDate { get; init; }
-    public List<Products> ProductsOrdered { get; init; } = new List<Products>();
     
     public void DisplayOrders()
     {
