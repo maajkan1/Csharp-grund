@@ -31,12 +31,7 @@ public class ShoppingCart
    {
        _cart.Add(product);
    }
-
-   public void RemoveProduct(Products product)
-   {
-       _cart.Remove(product);
-   }
-
+   
    public void DisplayCart(List<Order> orders)
    {
        if (_cart.Count == 0)
