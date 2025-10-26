@@ -16,6 +16,6 @@ public class Wine
 
 public class Rating
 {
-    public string Average { get; }
-    public string Reviews { get; }
+    public string Average { get; set;  }
+    public string Reviews { get; set; }
 }

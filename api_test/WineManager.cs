@@ -15,18 +15,54 @@ public static class WineManager
         var json = await response.Content.ReadAsStringAsync();
         
         //Omvandla från JSON till C#
-       var wines = JsonSerializer.Deserialize<List<Wine>>(json, JsonSerializerOptions.Default);
+        var wines = JsonSerializer.Deserialize<List<Wine>>(json, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        });
         //Spara den i våran wines-variabel
        if (wines != null)
        {
            Wines = wines;
        }
+       return wines;
+    }
 
-       foreach (var wine in wines)
+    public static List<Wine> GetWinery(List<Wine> wines)
+    {
+        foreach (var wine in wines)
+        {
+            Console.WriteLine(wine.Winery);
+        }
+
+        return wines;
+    }
+    
+    public static List<Wine> GetWineName(List<Wine> wines)
+    {
+        foreach (var wine in wines)
+        {
+            Console.WriteLine(wine.Name);
+        }
+
+        return wines;
+    }
+    
+    public static List<Wine> GetLocation(List<Wine> wines)
+    {
+        foreach (var wine in wines)
+        {
+            Console.WriteLine(wine.Location);
+        }
+        
+        return wines;
+    }
+    
+    public static List<Wine> GetReviews(List<Wine> wines)
+    {
+       foreach(var wine in wines)
        {
-           Console.WriteLine(wine.Name);
+           Console.WriteLine(wine.Rating.Reviews);
        }
-
        return wines;
     }
 }
