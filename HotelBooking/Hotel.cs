@@ -3,10 +3,10 @@
 public class Hotel
 {
     public Dictionary<int, Room> Rooms { get; set; }
-    public List<Reservation> Reservations { get; set; }
+    public Dictionary <int, Reservation> Reservations { get; set; }
     public Hotel()
     {
-        Reservations = [];
+        Reservations = new Dictionary<int, Reservation>();
         Rooms = new Dictionary<int, Room>();
         CreateRooms();
         AddPriceClass(Rooms.Values.ToList());
@@ -52,23 +52,27 @@ public class Hotel
         var roomNumber = ConsoleUtils.ReadInt();
         
         Console.WriteLine("What date do you wanna check in? (YYYY-MM-DD)");
-        var checkIn = ConsoleUtils.ReadDateTime();
+        var checkInFromUser = ConsoleUtils.ReadDateTime();
         
         Console.WriteLine("What date do you wanna check out? (YYYY-MM-DD)");
-        var checkOut = ConsoleUtils.ReadDateTime();
-
+        var checkOutFromUser = ConsoleUtils.ReadDateTime();
+        //Adds so checkin is at 15:00 and checkout is 11:00
+        var checkIn = checkInFromUser.Date.AddHours(15);
+        var checkOut = checkOutFromUser.Date.AddHours(11);
         if (checkOut <= checkIn)
         {
             Console.WriteLine("Check out date cant be before check in date");
             return;
         }
-        if (CheckforAvailability(roomNumber, checkIn, checkOut))
+        //Checks if the room is available with the input from users
+        if (CheckForAvailability(roomNumber, checkIn, checkOut))
         {
             Console.WriteLine("Room is available, Would you like to book?");
             Console.WriteLine("Y/N");
             string choice =  ConsoleUtils.ReadString();
             if (choice.ToLower() == "y")
             {
+                //If it's available it will add all the inputs to the Reservation Dictionary
                 var newReservation = new Reservation
                 {
                     RoomNumber = roomNumber,
@@ -76,25 +80,31 @@ public class Hotel
                     CheckOut = checkOut
                     //Guest = guest;
                 };
-                Reservations.Add(newReservation);
+                //Adds into the Dictionary
+                Reservations.Add(newReservation.ReservationId, newReservation);
 
-                Console.WriteLine($"Ditt {roomNumber} is booked from {checkIn} to  {checkOut}");
+                Console.WriteLine($"Your room {roomNumber} is booked from {checkIn} to  {checkOut}");
             }
             else
             {
-                Console.WriteLine("Bokningen avbröts");
+                Console.WriteLine("Booking was cancelled");
             }
-
+            
+        }
+        else
+        {
+            Console.WriteLine("The room was booked the selected date, please try another room");
         }
     }
 
-    private bool CheckforAvailability(int roomNumber, DateTime checkIn, DateTime checkOut)
+    private bool CheckForAvailability(int roomNumber, DateTime checkIn, DateTime checkOut)
     {
-        bool isConflicting = Reservations.Any(reservation =>
-            reservation.RoomNumber == roomNumber &&
-            (checkIn < reservation.CheckOut) &&
-            (checkOut > reservation.CheckIn));
+        //Checks if the check-in and check-out is clear for booking.
+        bool checkingIfRoomIsBooked = Reservations.Any(reservation =>
+            reservation.Value.RoomNumber == roomNumber &&
+            (checkIn < reservation.Value.CheckOut) &&
+            (checkOut > reservation.Value.CheckIn));
         
-        return !isConflicting;
+        return !checkingIfRoomIsBooked;
     }
 }
