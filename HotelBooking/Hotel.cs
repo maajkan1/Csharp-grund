@@ -2,14 +2,14 @@
 
 public class Hotel
 {
-    public List<Room> Rooms { get; set; }
+    public Dictionary<int, Room> Rooms { get; set; }
     public List<Reservation> Reservations { get; set; }
     public Hotel()
     {
         Reservations = [];
-        Rooms = [];
+        Rooms = new Dictionary<int, Room>();
         CreateRooms();
-        AddPriceClass(Rooms);
+        AddPriceClass(Rooms.Values.ToList());
     }
         // Skapar rum från 101-509
     private void CreateRooms()
@@ -22,7 +22,8 @@ public class Hotel
             for (var j = 1; j <= 9; j++)
             {
                 var roomNumber = i * 100 + j;
-                Rooms.Add(new Room(roomNumber));
+                var newRoom = new Room(roomNumber);
+                Rooms.Add(roomNumber, newRoom);
             }
         }
     }
@@ -47,7 +48,7 @@ public class Hotel
 
     public void CreateReservation()
     {
-        Console.WriteLine("What room number would you like to reserve?");
+        /*Console.WriteLine("What room number would you like to reserve?");
         int roomNumber = ConsoleUtils.ReadInt();
         Console.WriteLine("What date do you wanna check in? (YYYY-MM-DD)");
         string checkIn = ConsoleUtils.ReadString();
@@ -63,7 +64,8 @@ public class Hotel
             {
                 Rooms.Add(new Room(roomNumber));
             }
-            
+
         }
+    }*/
     }
 }
