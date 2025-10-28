@@ -16,6 +16,7 @@ public static class ConsoleUtils
             Console.WriteLine("Felaktig inmatning, försök igen:");
         }
     }
+
     public static string ReadString()
     {
         while (true)
@@ -31,6 +32,7 @@ public static class ConsoleUtils
             return input;
         }
     }
+
     public static decimal ReadDecimal()
     {
         while (true)
@@ -45,6 +47,7 @@ public static class ConsoleUtils
             Console.WriteLine("Felaktig inmatning, försök igen:");
         }
     }
+
     public static long ReadLong()
     {
         while (true)
@@ -57,6 +60,23 @@ public static class ConsoleUtils
             }
 
             Console.WriteLine("Felaktig inmatning, försök igen:");
+        }
+    }
+
+    public static DateTime ReadDateTime()
+    {
+        while (true)
+        {
+            var input = Console.ReadLine();
+
+            if (DateTime.TryParse(input, out DateTime result))
+            {
+                return result;
+            }
+            else
+            {
+                Console.Write("Ogiltigt datumformat. Använd t.ex. ÅÅÅÅ-MM-DD och försök igen: ");
+            }
         }
     }
 }
