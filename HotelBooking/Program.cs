@@ -1,9 +1,12 @@
-﻿namespace HotelBooking;
+﻿using System.Globalization;
+
+namespace HotelBooking;
 
 class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        var hotel = new Hotel();
+        
     }
 }
