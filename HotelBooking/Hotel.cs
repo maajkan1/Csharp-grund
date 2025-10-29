@@ -51,19 +51,7 @@ public class Hotel
         Console.WriteLine("What room number would you like to reserve?");
         var roomNumber = ConsoleUtils.ReadInt();
         
-        Console.WriteLine("What date do you wanna check in? (YYYY-MM-DD)");
-        var checkInFromUser = ConsoleUtils.ReadDateTime();
-        
-        Console.WriteLine("What date do you wanna check out? (YYYY-MM-DD)");
-        var checkOutFromUser = ConsoleUtils.ReadDateTime();
-        //Adds so checkin is at 15:00 and checkout is 11:00
-        var checkIn = checkInFromUser.Date.AddHours(15);
-        var checkOut = checkOutFromUser.Date.AddHours(11);
-        if (checkOut <= checkIn)
-        {
-            Console.WriteLine("Check out date cant be before check in date");
-            return;
-        }
+        if (GetDates(out var checkIn, out var checkOut)) return;
         //Checks if the room is available with the input from users
         if (CheckForAvailability(roomNumber, checkIn, checkOut))
         {
@@ -97,14 +85,47 @@ public class Hotel
         }
     }
 
-    private bool CheckForAvailability(int roomNumber, DateTime checkIn, DateTime checkOut)
+    private static bool GetDates(out DateTime checkIn, out DateTime checkOut)
+    {
+        Console.WriteLine("What date do you wanna check in? (YYYY-MM-DD)");
+        var checkInFromUser = ConsoleUtils.ReadDateTime();
+        
+        Console.WriteLine("What date do you wanna check out? (YYYY-MM-DD)");
+        var checkOutFromUser = ConsoleUtils.ReadDateTime();
+        //Adds so checkin is at 15:00 and checkout is 11:00
+        checkIn = checkInFromUser.Date.AddHours(15);
+        checkOut = checkOutFromUser.Date.AddHours(11);
+        if (checkOut <= checkIn)
+        {
+            Console.WriteLine("Check out date cant be before check in date");
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool CheckForAvailability(int roomNumber, DateTime checkIn, DateTime checkOut)
     {
         //Checks if the check-in and check-out is clear for booking.
         bool checkingIfRoomIsBooked = Reservations.Any(reservation =>
             reservation.Value.RoomNumber == roomNumber &&
-            (checkIn < reservation.Value.CheckOut) &&
-            (checkOut > reservation.Value.CheckIn));
+            (checkIn.Date < reservation.Value.CheckOut) &&
+            (checkOut.Date > reservation.Value.CheckIn));
         
         return !checkingIfRoomIsBooked;
     }
+
+    public List<string> ShowAvailableRooms()
+    {
+        if (GetDates(out var checkIn, out var checkOut))
+        {
+            return new List<string>();
+        }
+        var availableRoom = Rooms.Values.
+            Where(room => CheckForAvailability(room.RoomNumber, checkIn, checkOut))
+            .Select(s => $"{s.RoomNumber} is available")
+            .ToList();
+        return availableRoom;
+    }
 }
+
