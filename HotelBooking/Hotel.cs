@@ -3,10 +3,10 @@
 public class Hotel
 {
     public Dictionary<int, Room> Rooms { get; set; }
-    public Dictionary <int, Reservation> Reservations { get; set; }
+    public Dictionary <string, List<Reservation>> Reservations { get; set; }
     public Hotel()
     {
-        Reservations = new Dictionary<int, Reservation>();
+        Reservations = new Dictionary<string, List<Reservation>>();
         Rooms = new Dictionary<int, Room>();
         CreateRooms();
         AddPriceClass(Rooms.Values.ToList());
@@ -46,9 +46,10 @@ public class Hotel
         }
     }
 
-    public void CreateReservation()
+    public void CreateReservation(Guest guest)
     {
         Console.WriteLine("What room number would you like to reserve?");
+        Console.WriteLine("Room numbers go from 101 to 509 (1-9)");
         var roomNumber = ConsoleUtils.ReadInt();
         
         if (GetDates(out var checkIn, out var checkOut)) return;
@@ -61,15 +62,22 @@ public class Hotel
             if (choice.ToLower() == "y")
             {
                 //If it's available it will add all the inputs to the Reservation Dictionary
+                var key = guest.Email.ToLower();
                 var newReservation = new Reservation
                 {
                     RoomNumber = roomNumber,
                     CheckIn = checkIn,
-                    CheckOut = checkOut
-                    //Guest = guest;
+                    CheckOut = checkOut,
+                    GuestInformation = guest
                 };
                 //Adds into the Dictionary
-                Reservations.Add(newReservation.ReservationId, newReservation);
+                if (!Reservations.ContainsKey(key))
+                {
+                    Reservations[key] = new List<Reservation>();
+                }
+
+// Lägg till reservationen i listan
+                Reservations[key].Add(newReservation);
 
                 Console.WriteLine($"Your room {roomNumber} is booked from {checkIn} to  {checkOut}");
             }
@@ -98,6 +106,11 @@ public class Hotel
         if (checkOut <= checkIn)
         {
             Console.WriteLine("Check out date cant be before check in date");
+            Console.WriteLine("Please try again");
+            return true;
+        } else if (checkIn < DateTime.Now) {
+            Console.WriteLine("Check in can't be before the current date");
+            Console.WriteLine("Please try again");
             return true;
         }
 
@@ -107,25 +120,44 @@ public class Hotel
     public bool CheckForAvailability(int roomNumber, DateTime checkIn, DateTime checkOut)
     {
         //Checks if the check-in and check-out is clear for booking.
-        bool checkingIfRoomIsBooked = Reservations.Any(reservation =>
-            reservation.Value.RoomNumber == roomNumber &&
-            (checkIn.Date < reservation.Value.CheckOut) &&
-            (checkOut.Date > reservation.Value.CheckIn));
-        
+        bool checkingIfRoomIsBooked = Reservations.Values
+            .SelectMany(reservationList => reservationList)
+            .Any(reservation =>
+                reservation.RoomNumber == roomNumber &&
+                (checkIn < reservation.CheckOut) &&
+                (checkOut > reservation.CheckIn));
+
         return !checkingIfRoomIsBooked;
     }
 
     public List<string> ShowAvailableRooms()
     {
+        //Secures the right input for dates
         if (GetDates(out var checkIn, out var checkOut))
         {
+            //If not available returns an empty string
+            //Can change this to "No rooms available on selected date" or "wrong input, please try again"
             return new List<string>();
         }
+        //Writes out all the available rooms 
         var availableRoom = Rooms.Values.
             Where(room => CheckForAvailability(room.RoomNumber, checkIn, checkOut))
             .Select(s => $"{s.RoomNumber} is available")
             .ToList();
         return availableRoom;
+    }
+
+    public List<string>ShowReservationForGuest(Guest guest)
+    {
+        {
+            var key = guest.Email.ToLower();
+            if (!Reservations.ContainsKey(key))
+                return new List<string> { "No reservations for this guest" };
+
+            return Reservations[key]
+                .Select(r => $"Room {r.RoomNumber} booked from {r.CheckIn} to {r.CheckOut}")
+                .ToList();
+        }
     }
 }
 

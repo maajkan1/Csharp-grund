@@ -2,7 +2,7 @@
 
 public class Reservation
 {
-    private readonly int _nextId = 1;
+    private static int _nextId = 1;
     public DateTime CheckIn { get; set; }
     public DateTime CheckOut { get; set; }
     public int RoomNumber { get; set; }
