@@ -12,4 +12,12 @@ public class Room
     {
         RoomNumber = roomNumber;
     }
+
+    public static double RoomPriceAdjuster(Room room, DateTime checkIn, DateTime checkOut)
+    {
+        var roomPriceFromWeekToDay = room.RoomPrice / 7.0;
+        var totalDaysAtHotel = (checkOut - checkIn).TotalDays;
+        var totalCost = roomPriceFromWeekToDay * totalDaysAtHotel;
+        return Math.Round(totalCost, 2);
+    }
 }

@@ -75,8 +75,9 @@ public static class ConsoleUtils
             }
             else
             {
-                Console.Write("Ogiltigt datumformat. Använd t.ex. ÅÅÅÅ-MM-DD och försök igen: ");
+                Console.Write("Wrong format. Use - YYYY-MM-DD och and try again: ");
             }
+            
         }
     }
 }

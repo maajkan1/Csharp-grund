@@ -16,10 +16,12 @@ class Program
         {
             Console.Clear();
             Console.WriteLine("=====Make Your Choices=====");
-            Console.WriteLine("[1] Book a hotelroom");
+            Console.WriteLine("[1] Book a hotel room");
             Console.WriteLine("[2] Check for available rooms");
             Console.WriteLine("[3] Check your bookings");
             Console.WriteLine("[4] Cancel booking");
+            Console.WriteLine("[5] Check all bookings");
+            Console.WriteLine("[6] Total Earnings");
             
             var choice = ConsoleUtils.ReadInt();
             switch (choice)
@@ -34,8 +36,16 @@ class Program
                 case 3:
                     hotel.ShowReservationForGuest(guest).ForEach(Console.WriteLine);
                     break;
-                case 4: 
-                    //TODO : hotel.CancelBookings
+                case 4:
+                    hotel.CancelBooking(guest);
+                    Console.ReadKey();
+                    break;
+                case 5:
+                    hotel.CheckAllBookings();
+                    Console.ReadKey();
+                    break;
+                case 6:
+                    hotel.TotalEarnings();
                     break;
                 default:
                     Console.WriteLine("Ogiltlig inmatning");

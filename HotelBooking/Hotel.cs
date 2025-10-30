@@ -1,9 +1,12 @@
-﻿namespace HotelBooking;
+﻿using System.Globalization;
+
+namespace HotelBooking;
 
 public class Hotel
 {
     public Dictionary<int, Room> Rooms { get; set; }
     public Dictionary <string, List<Reservation>> Reservations { get; set; }
+    private double _totalEarnings;
     public Hotel()
     {
         Reservations = new Dictionary<string, List<Reservation>>();
@@ -37,10 +40,10 @@ public class Hotel
             // Think of it that the higher up you come, the better view and hotel room quality
             roomFloor.RoomPrice = floor switch
             {
-                1 or 2 => 1000,
-                3 or 4 => 1500,
-                5 => 2500,
-                _ => 1000
+                1 or 2 => 6000,
+                3 or 4 => 6500,
+                5 => 7000,
+                _ => 5000
                 //Följde Riders Template för snyggare switch-expression.
             };
         }
@@ -52,15 +55,29 @@ public class Hotel
         Console.WriteLine("Room numbers go from 101 to 509 (1-9)");
         var roomNumber = ConsoleUtils.ReadInt();
         
+        var room = GetRoomByNumber(roomNumber);
+        if (room == null)
+        {
+            //Quick check to see if the room even exist
+            Console.WriteLine("That room does not exist.");
+            return;
+        }
+        //Gets the dates from the user when it wants to stay
         if (GetDates(out var checkIn, out var checkOut)) return;
+        
+        //Projects and writes out the cost of the room for selected days
+        var costOfRoom = Room.RoomPriceAdjuster(room, checkIn, checkOut);
+        Console.WriteLine($"It will cost {costOfRoom} for {Math.Round((checkOut - checkIn).TotalDays), 2} days");
+        
         //Checks if the room is available with the input from users
-        if (CheckForAvailability(roomNumber, checkIn, checkOut))
+        if (CheckForAvailability(roomNumber, checkOut, checkIn))
         {
             Console.WriteLine("Room is available, Would you like to book?");
             Console.WriteLine("Y/N");
             string choice =  ConsoleUtils.ReadString();
             if (choice.ToLower() == "y")
             {
+                _totalEarnings += costOfRoom;
                 //If it's available it will add all the inputs to the Reservation Dictionary
                 var key = guest.Email.ToLower();
                 var newReservation = new Reservation
@@ -76,7 +93,7 @@ public class Hotel
                     Reservations[key] = new List<Reservation>();
                 }
 
-// Lägg till reservationen i listan
+                //Add the reservation to the list (key : email , booking info : list of reservation
                 Reservations[key].Add(newReservation);
 
                 Console.WriteLine($"Your room {roomNumber} is booked from {checkIn} to  {checkOut}");
@@ -91,6 +108,11 @@ public class Hotel
         {
             Console.WriteLine("The room was booked the selected date, please try another room");
         }
+    }
+    
+    private Room GetRoomByNumber(int roomNumber)
+    {
+        return Rooms.TryGetValue(roomNumber, out var room) ? room : null;
     }
 
     private static bool GetDates(out DateTime checkIn, out DateTime checkOut)
@@ -149,7 +171,6 @@ public class Hotel
 
     public List<string>ShowReservationForGuest(Guest guest)
     {
-        {
             var key = guest.Email.ToLower();
             if (!Reservations.ContainsKey(key))
                 return new List<string> { "No reservations for this guest" };
@@ -157,7 +178,62 @@ public class Hotel
             return Reservations[key]
                 .Select(r => $"Room {r.RoomNumber} booked from {r.CheckIn} to {r.CheckOut}")
                 .ToList();
+    }
+
+    public void CancelBooking(Guest guest)
+    {
+        //TODO: Det ska kunna gå att ta bort bokningar via for loop.
+        //TODO: Det innebär att bokningar ska sorteras på Key
+        //TODO: Och i keyn så ska man kunna selecta vilken bokning man vill ta bort.
+        var key = guest.Email.ToLower();
+        if (Reservations.ContainsKey(key))
+        {
+            string bookingList = string.Join("\n",
+                Reservations[key]
+                    .Select(r => $"Room {r.RoomNumber} booked from {r.CheckIn} to {r.CheckOut}"));
+            Console.WriteLine("Lista över dina bokningar: ");
+            Console.WriteLine(bookingList);
+            Console.WriteLine("Would you like to remove your booking?");
+            Console.WriteLine("Y/N");
+            string choice =  ConsoleUtils.ReadString();
+            if (choice.ToLower() == "y")
+            {
+                Reservations.Remove(key);
+            }         
+            else
+            {
+                Console.WriteLine("Returning to menu");
+            }
+
+            
         }
+        else
+        {
+            Console.WriteLine("We found no bookings under your name");
+        }
+    }
+
+    public void CheckAllBookings()
+    {
+        foreach (var key in Reservations.Values)
+        {
+            foreach (var reservation in key)
+            {
+                Console.WriteLine($"Reservation ID: {reservation.ReservationId}");
+                Console.WriteLine($"Room: {reservation.RoomNumber}");
+                Console.WriteLine($"Guest: {reservation.GuestInformation.Name}");
+                Console.WriteLine($"Check-in: {reservation.CheckIn}");
+                Console.WriteLine($"Check-out: {reservation.CheckOut}");
+                Console.WriteLine("-----------------------------");
+            }
+        }
+
+        Console.WriteLine($"Total bookings = {Reservations.Values.Count}");
+    }
+
+    public void TotalEarnings()
+    {
+        Console.WriteLine($"The hotel has earned {_totalEarnings:C2}\non {Reservations.Values.Count} bookings");
     }
 }
 
