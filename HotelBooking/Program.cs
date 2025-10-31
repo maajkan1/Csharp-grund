@@ -35,6 +35,7 @@ class Program
                     break;
                 case 3:
                     hotel.ShowReservationForGuest(guest).ForEach(Console.WriteLine);
+                    Console.ReadKey();
                     break;
                 case 4:
                     hotel.CancelBooking(guest);

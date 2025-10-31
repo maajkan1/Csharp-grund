@@ -14,7 +14,7 @@ public class Hotel
         CreateRooms();
         AddPriceClass(Rooms.Values.ToList());
     }
-        // Skapar rum från 101-509
+        // Creates room from 101 to 509 (45 total)
     private void CreateRooms()
     {
         //The outer loops counts from 1-5
@@ -44,7 +44,7 @@ public class Hotel
                 3 or 4 => 6500,
                 5 => 7000,
                 _ => 5000
-                //Följde Riders Template för snyggare switch-expression.
+                //Used Riders suggestion for nicer switch template.
             };
         }
     }
@@ -85,9 +85,11 @@ public class Hotel
                     RoomNumber = roomNumber,
                     CheckIn = checkIn,
                     CheckOut = checkOut,
-                    GuestInformation = guest
+                    GuestInformation = guest,
+                    CostOfReservation = costOfRoom,
                 };
-                //Adds into the Dictionary
+                //Adds the guest email number as a key to search for.
+                //its Dictionary<Users email, List<Reservations by that User>>
                 if (!Reservations.ContainsKey(key))
                 {
                     Reservations[key] = new List<Reservation>();
@@ -176,36 +178,51 @@ public class Hotel
                 return new List<string> { "No reservations for this guest" };
 
             return Reservations[key]
-                .Select(r => $"Room {r.RoomNumber} booked from {r.CheckIn} to {r.CheckOut}")
+                .Select(r => $"Room {r.RoomNumber} booked\nfrom {r.CheckIn}\nto {r.CheckOut}\n----------------------------------------------------")
                 .ToList();
     }
 
     public void CancelBooking(Guest guest)
     {
-        //TODO: Det ska kunna gå att ta bort bokningar via for loop.
-        //TODO: Det innebär att bokningar ska sorteras på Key
-        //TODO: Och i keyn så ska man kunna selecta vilken bokning man vill ta bort.
         var key = guest.Email.ToLower();
-        if (Reservations.ContainsKey(key))
+        if (Reservations.TryGetValue(key, out List<Reservation>? value))
         {
-            string bookingList = string.Join("\n",
-                Reservations[key]
-                    .Select(r => $"Room {r.RoomNumber} booked from {r.CheckIn} to {r.CheckOut}"));
             Console.WriteLine("Lista över dina bokningar: ");
-            Console.WriteLine(bookingList);
-            Console.WriteLine("Would you like to remove your booking?");
+            for (int i = 0; i < value.Count; i++)
+            {
+                var s = value[i];
+                Console.WriteLine($"{i + 1}. RoomNumber: {s.RoomNumber}");
+                Console.WriteLine($"   Check-in: {s.CheckIn}");
+                Console.WriteLine($"   Check-out: {s.CheckOut}");
+                Console.WriteLine("----------------------------------------------------");
+            } 
+
+            Console.WriteLine("Would you like to remove a booking?");
             Console.WriteLine("Y/N");
-            string choice =  ConsoleUtils.ReadString();
+            var choice = ConsoleUtils.ReadString();
             if (choice.ToLower() == "y")
             {
-                Reservations.Remove(key);
-            }         
-            else
-            {
-                Console.WriteLine("Returning to menu");
+                Console.WriteLine("Enter the number of the booking you want to remove:");
+                int index = ConsoleUtils.ReadInt();
+                
+                if (Reservations[key].Count == 1)
+                {
+                    var roomCost = Reservations[key][index - 1].CostOfReservation;
+                    _totalEarnings -= roomCost;
+                    Reservations.Remove(key);
+                }
+                else if (index > 0 && index <= Reservations[key].Count)
+                {
+                    var roomCost = Reservations[key][index - 1].CostOfReservation;
+                    _totalEarnings -= roomCost;
+                    Reservations[key].RemoveAt(index - 1);
+                    Console.WriteLine("Booking removed successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid selection.");
+                }
             }
-
-            
         }
         else
         {

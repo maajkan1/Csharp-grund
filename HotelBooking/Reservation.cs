@@ -6,8 +6,10 @@ public class Reservation
     public DateTime CheckIn { get; set; }
     public DateTime CheckOut { get; set; }
     public int RoomNumber { get; set; }
-    public int ReservationId { get; set; }
+    public int ReservationId { get;}
     public Guest GuestInformation { get; set; }
+    
+    public double CostOfReservation { get; set; }
 
     public Reservation()
     {
