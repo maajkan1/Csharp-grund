@@ -21,14 +21,14 @@ class Program
         await SocketManager.Connect();
         await SocketManager.ChannelConnect("general", newUser);
         MessageFromUser.Messages.Add(new UserMessage("hejhejhej", newUser));
-
+        SocketManager.DisplayMessages("general");
         while (true)
         {
 
             var input = Console.ReadLine();
             var message = new UserMessage(input, newUser);
             await SocketManager.Send("general", message);
-            await SocketManager.DisplayMessages();
+            await SocketManager.DisplayMessages("general");
         }
     }
 }

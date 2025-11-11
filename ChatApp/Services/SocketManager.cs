@@ -42,14 +42,14 @@ public class SocketManager
             var  userJoined = response.GetValue<UserEvents>();
             Console.WriteLine($"{userJoined.Timestamp:HH:mm} {userJoined.Username}: {userJoined.Status}");
             Thread.Sleep(5000);
-            await DisplayMessages();
+            await DisplayMessages(channelName);
         });
         
         _client.On(channelName, async response =>
         {
             var receivedMessage = response.GetValue<UserMessage>();
-            MessageFromUser.Messages.Add(receivedMessage); 
-            await DisplayMessages();
+            MessageFromUser.Messages.Add(receivedMessage);
+            await DisplayMessages(channelName);
         });
         await _client.EmitAsync($"{channelName}.systemevents", new UserEvents
         {
@@ -59,10 +59,12 @@ public class SocketManager
         } );
     }
 
-    public static async Task DisplayMessages()
+
+
+    public static async Task DisplayMessages(string channelName)
     {
         Console.Clear();
-        Console.WriteLine("=================================");
+        Console.WriteLine($"==========ROOM:{channelName}=================");
         foreach (var messages in MessageFromUser.Messages)
         {
             Console.WriteLine($"{messages.Timestamp:HH:mm} {messages.Username}: {messages.MessageText}");
